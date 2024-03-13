@@ -1,8 +1,8 @@
-module org.example.demo {
+module fitness.studiomanager {
     requires javafx.controls;
     requires javafx.fxml;
 
 
-    opens org.example.demo to javafx.fxml;
-    exports org.example.demo;
+    opens fitness.studiomanager to javafx.fxml;
+    exports fitness.studiomanager;
 }

@@ -1,4 +1,4 @@
-package org.example.demo;
+package fitness.studiomanager;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
