@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fitness.studiomanager.StudioManagerController">
    <center>
       <TabPane prefHeight="0.0" prefWidth="0.0" style="-fx-border-color: green;" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
@@ -13,29 +13,29 @@
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="358.0" prefWidth="579.0">
                      <children>
                         <Label layoutX="28.0" layoutY="31.0" text="Member Profile" />
-                        <TextField layoutX="134.0" layoutY="27.0" prefHeight="22.0" prefWidth="325.0" promptText="first name" />
-                        <TextField layoutX="134.0" layoutY="54.0" prefHeight="22.0" prefWidth="325.0" promptText="last name" />
-                        <DatePicker layoutX="134.0" layoutY="81.0" promptText="date of birth" />
+                        <TextField fx:id="firstNameTextField1" layoutX="134.0" layoutY="27.0" prefHeight="22.0" prefWidth="325.0" promptText="first name" />
+                        <TextField fx:id="lastNameTextField1" layoutX="134.0" layoutY="54.0" prefHeight="22.0" prefWidth="325.0" promptText="last name" />
+                        <DatePicker fx:id="dobDatePicker1" layoutX="134.0" layoutY="81.0" promptText="date of birth" />
                         <Label layoutX="28.0" layoutY="118.0" text="Member Type" />
                         <Label layoutX="28.0" layoutY="152.0" text="Home Studio" />
-                        <RadioButton layoutX="134.0" layoutY="117.0" mnemonicParsing="false" selected="true" text="Basic">
+                        <RadioButton layoutX="134.0" layoutY="117.0" mnemonicParsing="false" onAction="#handleMemberType" selected="true" text="Basic">
                            <toggleGroup>
-                              <ToggleGroup fx:id="MemberType" />
+                              <ToggleGroup fx:id="memberTypeRadio" />
                            </toggleGroup></RadioButton>
-                        <RadioButton layoutX="204.0" layoutY="117.0" mnemonicParsing="false" text="Family" toggleGroup="$MemberType" />
-                        <RadioButton layoutX="274.0" layoutY="117.0" mnemonicParsing="false" text="Premium" toggleGroup="$MemberType" />
+                        <RadioButton layoutX="204.0" layoutY="117.0" mnemonicParsing="false" onAction="#handleMemberType" text="Family" toggleGroup="$memberTypeRadio" />
+                        <RadioButton layoutX="274.0" layoutY="117.0" mnemonicParsing="false" onAction="#handleMemberType" text="Premium" toggleGroup="$memberTypeRadio" />
                         <Label layoutX="360.0" layoutY="118.0" text="Guest Pass" />
-                        <TextField layoutX="428.0" layoutY="114.0" prefHeight="22.0" prefWidth="30.0" text="0" />
-                        <RadioButton layoutX="134.0" layoutY="151.0" mnemonicParsing="false" selected="true" text="Bridgewater">
+                        <TextField fx:id="guestPassTextField1" editable="false" layoutX="428.0" layoutY="114.0" prefHeight="22.0" prefWidth="30.0" text="0" />
+                        <RadioButton layoutX="134.0" layoutY="151.0" mnemonicParsing="false" onAction="#handleHomeStudio1" selected="true" text="Bridgewater">
                            <toggleGroup>
-                             <ToggleGroup fx:id="HomeStudio1" />
+                             <ToggleGroup fx:id="homeStudioRadio1" />
                            </toggleGroup></RadioButton>
-                        <RadioButton layoutX="231.0" layoutY="151.0" mnemonicParsing="false" text="Edison" toggleGroup="$HomeStudio1" />
-                        <RadioButton layoutX="301.0" layoutY="151.0" mnemonicParsing="false" text="Franklin" toggleGroup="$HomeStudio1" />
-                        <RadioButton layoutX="134.0" layoutY="179.0" mnemonicParsing="false" text="Piscataway" toggleGroup="$HomeStudio1" />
-                        <RadioButton layoutX="231.0" layoutY="179.0" mnemonicParsing="false" text="Somerville" toggleGroup="$HomeStudio1" />
-                        <Button layoutX="101.0" layoutY="212.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="120.0" text="Add New" />
-                        <Button layoutX="270.0" layoutY="212.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="120.0" text="Load Members" />
+                        <RadioButton layoutX="231.0" layoutY="151.0" mnemonicParsing="false" onAction="#handleHomeStudio1" text="Edison" toggleGroup="$homeStudioRadio1" />
+                        <RadioButton layoutX="301.0" layoutY="151.0" mnemonicParsing="false" onAction="#handleHomeStudio1" text="Franklin" toggleGroup="$homeStudioRadio1" />
+                        <RadioButton layoutX="134.0" layoutY="179.0" mnemonicParsing="false" onAction="#handleHomeStudio1" text="Piscataway" toggleGroup="$homeStudioRadio1" />
+                        <RadioButton layoutX="231.0" layoutY="179.0" mnemonicParsing="false" onAction="#handleHomeStudio1" text="Somerville" toggleGroup="$homeStudioRadio1" />
+                        <Button fx:id="addNewButton" layoutX="101.0" layoutY="212.0" mnemonicParsing="false" onAction="#onAddNewButtonClick" prefHeight="25.0" prefWidth="120.0" text="Add New" />
+                        <Button fx:id="loadMembersButton" layoutX="270.0" layoutY="212.0" mnemonicParsing="false" onAction="#onLoadMembersButtonClick" prefHeight="25.0" prefWidth="120.0" text="Load Members" />
                      </children></AnchorPane>
             </content>
           </Tab>
@@ -46,34 +46,34 @@
                          <Label layoutX="28.0" layoutY="31.0" text="Class" />
                         <RadioButton layoutX="85.0" layoutY="30.0" mnemonicParsing="false" selected="true" text="Pilates">
                             <toggleGroup>
-                                <ToggleGroup fx:id="ClassType" />
+                                <ToggleGroup fx:id="classTypeRadio" />
                             </toggleGroup></RadioButton>
-                        <RadioButton layoutX="153.0" layoutY="30.0" mnemonicParsing="false" text="Spinning" toggleGroup="$ClassType" />
-                        <RadioButton layoutX="232.0" layoutY="30.0" mnemonicParsing="false" text="Cardio" toggleGroup="$ClassType" />
+                        <RadioButton layoutX="153.0" layoutY="30.0" mnemonicParsing="false" text="Spinning" toggleGroup="$classTypeRadio" />
+                        <RadioButton layoutX="232.0" layoutY="30.0" mnemonicParsing="false" text="Cardio" toggleGroup="$classTypeRadio" />
                         <Label layoutX="15.0" layoutY="61.0" text="Instructor" />
                         <RadioButton layoutX="85.0" layoutY="60.0" mnemonicParsing="false" selected="true" text="Jennifer">
                             <toggleGroup>
-                                <ToggleGroup fx:id="Instructor" />
+                                <ToggleGroup fx:id="instructorRadio" />
                             </toggleGroup></RadioButton>
-                        <RadioButton layoutX="160.0" layoutY="60.0" mnemonicParsing="false" text="Kim" toggleGroup="$Instructor" />
-                        <RadioButton layoutX="213.0" layoutY="60.0" mnemonicParsing="false" text="Denise" toggleGroup="$Instructor" />
-                        <RadioButton layoutX="280.0" layoutY="60.0" mnemonicParsing="false" text="Davis" toggleGroup="$Instructor" />
-                        <RadioButton layoutX="335.0" layoutY="60.0" mnemonicParsing="false" text="Emma" toggleGroup="$Instructor" />
+                        <RadioButton layoutX="160.0" layoutY="60.0" mnemonicParsing="false" text="Kim" toggleGroup="$instructorRadio" />
+                        <RadioButton layoutX="213.0" layoutY="60.0" mnemonicParsing="false" text="Denise" toggleGroup="$instructorRadio" />
+                        <RadioButton layoutX="280.0" layoutY="60.0" mnemonicParsing="false" text="Davis" toggleGroup="$instructorRadio" />
+                        <RadioButton layoutX="335.0" layoutY="60.0" mnemonicParsing="false" text="Emma" toggleGroup="$instructorRadio" />
                         <Label layoutX="19.0" layoutY="90.0" text="Location" />
                          <RadioButton layoutX="85.0" layoutY="90.0" mnemonicParsing="false" selected="true" text="Bridgewater">
                              <toggleGroup>
-                                 <ToggleGroup fx:id="HomeStudio2" />
+                                 <ToggleGroup fx:id="HomeStudioRadio2" />
                              </toggleGroup></RadioButton>
-                         <RadioButton layoutX="182.0" layoutY="90.0" mnemonicParsing="false" text="Edison" toggleGroup="$HomeStudio2" />
-                         <RadioButton layoutX="252.0" layoutY="90.0" mnemonicParsing="false" text="Franklin" toggleGroup="$HomeStudio2" />
-                         <RadioButton layoutX="85.0" layoutY="118.0" mnemonicParsing="false" text="Piscataway" toggleGroup="$HomeStudio2" />
-                         <RadioButton layoutX="182.0" layoutY="118.0" mnemonicParsing="false" text="Somerville" toggleGroup="$HomeStudio2" />
+                         <RadioButton layoutX="182.0" layoutY="90.0" mnemonicParsing="false" text="Edison" toggleGroup="$HomeStudioRadio2" />
+                         <RadioButton layoutX="252.0" layoutY="90.0" mnemonicParsing="false" text="Franklin" toggleGroup="$HomeStudioRadio2" />
+                         <RadioButton layoutX="85.0" layoutY="118.0" mnemonicParsing="false" text="Piscataway" toggleGroup="$HomeStudioRadio2" />
+                         <RadioButton layoutX="182.0" layoutY="118.0" mnemonicParsing="false" text="Somerville" toggleGroup="$HomeStudioRadio2" />
                         <Label layoutX="19.0" layoutY="146.0" text="Member" />
                         <TextField layoutX="85.0" layoutY="142.0" promptText="first name" />
                         <DatePicker layoutX="85.0" layoutY="174.0" promptText="date of birth" />
                         <TextField layoutX="260.0" layoutY="142.0" promptText="last name" />
                          <Label layoutX="278.0" layoutY="178.0" text="Guest Pass Remaining" />
-                        <TextField layoutX="407.0" layoutY="174.0" prefHeight="22.0" prefWidth="30.0" />
+                        <TextField fx:id="guestPassTextField2" editable="false" layoutX="407.0" layoutY="174.0" prefHeight="22.0" prefWidth="30.0" text="0" />
                         <Button layoutX="43.0" layoutY="207.0" mnemonicParsing="false" text="Add Member" />
                         <Button layoutX="151.0" layoutY="207.0" mnemonicParsing="false" text="Remove Member" />
                         <Button layoutX="270.0" layoutY="207.0" mnemonicParsing="false" text="Add Guest" />
@@ -103,7 +103,7 @@
       </TabPane>
    </center>
    <bottom>
-      <TextArea prefHeight="256.0" prefWidth="581.0" style="-fx-border-color: orange;" BorderPane.alignment="CENTER">
+      <TextArea fx:id="textArea" editable="false" prefHeight="256.0" prefWidth="581.0" style="-fx-border-color: orange;" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </BorderPane.margin></TextArea>
