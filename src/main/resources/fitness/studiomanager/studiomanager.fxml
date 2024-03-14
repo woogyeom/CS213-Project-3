@@ -4,11 +4,71 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" prefHeight="300.0" prefWidth="500.0" spacing="20.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.2-ea" fx:controller="fitness.studiomanager.StudioManagerController">
-  <padding>
-    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-  </padding>
-
-  <Label fx:id="welcomeText" />
-  <Button onAction="#onHelloButtonClick" text="Hello!" />
-</VBox>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <TabPane prefHeight="0.0" prefWidth="0.0" style="-fx-border-color: green;" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab text="Membership">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="358.0" prefWidth="579.0">
+                     <children>
+                        <Label layoutX="28.0" layoutY="31.0" text="Member Profile" />
+                        <TextField layoutX="134.0" layoutY="27.0" prefHeight="22.0" prefWidth="325.0" promptText="first name" />
+                        <TextField layoutX="134.0" layoutY="54.0" prefHeight="22.0" prefWidth="325.0" promptText="last name" />
+                        <DatePicker layoutX="134.0" layoutY="81.0" promptText="date of birth" />
+                        <Label layoutX="28.0" layoutY="118.0" text="Member Type" />
+                        <Label layoutX="28.0" layoutY="152.0" text="Home Studio" />
+                        <RadioButton layoutX="134.0" layoutY="117.0" mnemonicParsing="false" selected="true" text="Basic">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="MemberType" />
+                           </toggleGroup></RadioButton>
+                        <RadioButton layoutX="204.0" layoutY="117.0" mnemonicParsing="false" text="Family" toggleGroup="$MemberType" />
+                        <RadioButton layoutX="274.0" layoutY="117.0" mnemonicParsing="false" text="Premium" toggleGroup="$MemberType" />
+                        <Label layoutX="360.0" layoutY="118.0" text="Guest Pass" />
+                        <TextField layoutX="428.0" layoutY="114.0" prefHeight="22.0" prefWidth="30.0" text="0" />
+                        <RadioButton layoutX="134.0" layoutY="151.0" mnemonicParsing="false" selected="true" text="Bridgewater">
+                           <toggleGroup>
+                             <ToggleGroup fx:id="HomeStudio" />
+                           </toggleGroup></RadioButton>
+                        <RadioButton layoutX="231.0" layoutY="151.0" mnemonicParsing="false" text="Edison" toggleGroup="$HomeStudio" />
+                        <RadioButton layoutX="301.0" layoutY="151.0" mnemonicParsing="false" text="Franklin" toggleGroup="$HomeStudio" />
+                        <RadioButton layoutX="134.0" layoutY="179.0" mnemonicParsing="false" text="Piscataway" toggleGroup="$HomeStudio" />
+                        <RadioButton layoutX="231.0" layoutY="179.0" mnemonicParsing="false" text="Somerville" toggleGroup="$HomeStudio" />
+                        <Button layoutX="101.0" layoutY="212.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="120.0" text="Add New" />
+                        <Button layoutX="270.0" layoutY="212.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="120.0" text="Load Members" />
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Class Attendance">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+            <Tab text="Class Schedule">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+            <Tab text="Studio Location">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+          <Tab text="Demo Only">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+        </tabs>
+         <BorderPane.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </BorderPane.margin>
+      </TabPane>
+   </center>
+   <bottom>
+      <TextArea prefHeight="256.0" prefWidth="581.0" style="-fx-border-color: orange;" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </BorderPane.margin></TextArea>
+   </bottom>
+</BorderPane>
