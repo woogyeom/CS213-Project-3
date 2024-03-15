@@ -1,12 +1,18 @@
 package fitness.studiomanager;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class StudioManagerController {
 
@@ -86,7 +92,61 @@ public class StudioManagerController {
     @FXML
     private Button removeGuestButton;
 
+    @FXML
+    private TableView<FitnessClass> scheduleTable;
+
+    @FXML
+    private TableColumn<FitnessClass, Offer> classColumn;
+
+    @FXML
+    private TableColumn<FitnessClass, Instructor> instructorColumn;
+
+    @FXML
+    private TableColumn<FitnessClass, Location> locationColumn;
+
+    @FXML
+    private TableColumn<FitnessClass, Time> timeColumn;
+
+    @FXML
+    private Button loadScheduleButton;
+
     //
+
+    @FXML
+    private void handleLoadSchedule(ActionEvent event) {
+        FileChooser filechooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        filechooser.getExtensionFilters().add(extFilter);
+
+        File file = filechooser.showOpenDialog(null);
+
+        if (file != null) {
+            Schedule schedule = new Schedule();
+            try {
+                schedule.load(file);
+                displayScheduleInfo(schedule);
+            } catch (IOException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Loading Schedule");
+                alert.setHeaderText(null);
+                alert.setContentText("Could not load the schedule file.");
+                alert.showAndWait();
+            }
+        }
+    }
+
+    private void displayScheduleInfo(Schedule schedule) {
+        classColumn.setCellValueFactory(new PropertyValueFactory<FitnessClass, Offer>("classInfo"));
+        instructorColumn.setCellValueFactory(new PropertyValueFactory<FitnessClass, Instructor>("instructor"));
+        locationColumn.setCellValueFactory(new PropertyValueFactory<FitnessClass, Location>("studio"));
+        timeColumn.setCellValueFactory(new PropertyValueFactory<FitnessClass, Time>("time"));
+
+        ObservableList<FitnessClass> observableList = FXCollections.observableArrayList(Arrays.asList(schedule.getClasses()));
+        observableList.removeIf(Objects::isNull);
+        scheduleTable.setItems(observableList);
+
+    }
+
 
     private String memberTypeStr = "Basic";
     @FXML

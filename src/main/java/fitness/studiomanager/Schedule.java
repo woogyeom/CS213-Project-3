@@ -24,7 +24,7 @@ public class Schedule {
      * @throws IOException If an I/O error occurs while reading the file.
      */
     public void load(File file) throws IOException {
-        System.out.println("-Fitness classes loaded-");
+        //System.out.println("-Fitness classes loaded-");
 
         Scanner scanner = new Scanner(file);
 
@@ -50,10 +50,10 @@ public class Schedule {
 
             FitnessClass lesson = new FitnessClass(offer, instructor, homeStudio, time);
             add(lesson);
-            System.out.println(lesson);
+            //System.out.println(lesson);
         }
 
-        System.out.println("-end of class list.");
+        //System.out.println("-end of class list.");
 
     }
 
