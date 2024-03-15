@@ -21,6 +21,9 @@ public class StudioManagerController {
         this.schedule = new Schedule();
     }
 
+
+    // first tab
+
     @FXML
     private TextArea textArea;
 
@@ -38,10 +41,17 @@ public class StudioManagerController {
 
     @FXML
     private TextField guestPassTextField1;
-    private TextField guestPassTextField2;
 
     @FXML
     private ToggleGroup homeStudioRadio1;
+
+    @FXML
+    private Button addNewButton;
+
+    @FXML
+    private Button loadMembersButton;
+
+    // second tab
 
     @FXML
     private ToggleGroup classTypeRadio;
@@ -50,13 +60,33 @@ public class StudioManagerController {
     private ToggleGroup instructorRadio;
 
     @FXML
-    private ToggleGroup HomeStudioRadio2;
+    private ToggleGroup homeStudioRadio2;
 
     @FXML
-    private Button addNewButton;
+    private TextField firstNameTextField2;
 
     @FXML
-    private Button loadMembersButton;
+    private TextField lastNameTextField2;
+
+    @FXML
+    private DatePicker dobDatePicker2;
+
+    @FXML
+    private TextField guestPassTextField2;
+
+    @FXML
+    private Button addMemberButton;
+
+    @FXML
+    private Button removeMemberButton;
+
+    @FXML
+    private Button addGuestButton;
+
+    @FXML
+    private Button removeGuestButton;
+
+    //
 
     private String memberTypeStr = "Basic";
     @FXML
@@ -77,12 +107,39 @@ public class StudioManagerController {
             }
         }
     }
-    private String homeStudioStr = "Bridgewater";
+    private String homeStudioStr1 = "Bridgewater";
     @FXML
     private void handleHomeStudio1() {
         RadioButton selectedRadioButton = (RadioButton) homeStudioRadio1.getSelectedToggle();
         if (selectedRadioButton != null) {
-            homeStudioStr = selectedRadioButton.getText();
+            homeStudioStr1 = selectedRadioButton.getText();
+        }
+    }
+
+    private String classTypeStr = "Pilates";
+    @FXML
+    private void handelClassType() {
+        RadioButton selectedRadioButton = (RadioButton) classTypeRadio.getSelectedToggle();
+        if (selectedRadioButton != null) {
+            classTypeStr = selectedRadioButton.getText();
+        }
+    }
+
+    private String instructorStr = "Jennifer";
+    @FXML
+    private void handleInstructor() {
+        RadioButton selectedRadioButton = (RadioButton) instructorRadio.getSelectedToggle();
+        if (selectedRadioButton != null) {
+            instructorStr = selectedRadioButton.getText();
+        }
+    }
+
+    private String homeStudioStr2 = "Bridgewater";
+    @FXML
+    private void handleHomeStudio2() {
+        RadioButton selectedRadioButton = (RadioButton) homeStudioRadio2.getSelectedToggle();
+        if (selectedRadioButton != null) {
+            homeStudioStr2 = selectedRadioButton.getText();
         }
     }
 
@@ -101,7 +158,7 @@ public class StudioManagerController {
             return;
         }
         Profile profile = new Profile(fname, lname, date);
-        Location homestudio = stringToLocation(homeStudioStr);
+        Location homestudio = stringToLocation(homeStudioStr1);
         Member member = switch (memberTypeStr) {
             case "Basic" -> new Basic(profile, Date.getExpirationDate("B"), homestudio);
             case "Family" -> new Family(profile, Date.getExpirationDate("F"), homestudio);
@@ -124,13 +181,159 @@ public class StudioManagerController {
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt");
         fileChooser.getExtensionFilters().add(extFilter);
 
-        Stage stage = (Stage) addNewButton.getScene().getWindow();
+        Stage stage = (Stage) loadMembersButton.getScene().getWindow();
         File file = fileChooser.showOpenDialog(stage);
 
         if (file != null) {
             memberlist.load(file);
             print("Members loaded.");
         }
+    }
+
+    @FXML
+    private void onAddMemberButtonClick() {
+        FitnessClass fitnessClass = checkClassValidity();
+        if (fitnessClass == null) return;
+        Member member = checkMemberValdity();
+        if (member == null) return;
+
+        if (member instanceof Basic && member.getHomeStudio() != fitnessClass.getStudio()) {
+            print(member.getProfile().toString() + " is attending a class at " + fitnessClass.getStudio().getCity() + ". - [BASIC] home studio at " + member.getHomeStudio().getCity());
+            return;
+        }
+        if (fitnessClass.getMembers().contains(member)) {
+            print(member.getProfile().toString() + " is already in the class.");
+            return;
+        }
+        FitnessClass[] classes = new FitnessClass[schedule.getNumClasses()];
+        int count = 0;
+        Time time = fitnessClass.getTime();
+        for (int i = 0; i < schedule.getNumClasses(); i++) {
+            if (schedule.getClasses()[i].getTime().equals(time)) {
+                classes[count] = schedule.getClasses()[i];
+                count++;
+            }
+        }
+        for (int i = 0; i < count; i++) {
+            if (classes[i].getMembers().contains(member)) {
+                System.out.println("Time conflict - " + member.getProfile().toString() + " is in another class held at " + time.toString() + " - " + fitnessClass.toString());
+                return;
+            }
+        }
+        fitnessClass.addMember(member);
+        if (member instanceof  Basic) {
+            ((Basic) member).setNumClasses(((Basic) member).getNumClasses() + 1);
+        }
+        System.out.println(member.getProfile().toString() + " attendance recorded " + fitnessClass.getClassInfo() + " at " + fitnessClass.getStudio());
+    }
+
+    @FXML
+    private void onRemoveMemberButtonClick() {
+        FitnessClass fitnessClass = checkClassValidity();
+        if (fitnessClass == null) return;
+        Member member = checkMemberValdity();
+        if (member == null) return;
+
+        if (!fitnessClass.getMembers().contains(member)) {
+            print(member.getProfile().toString() + " is not in " + fitnessClass.toString());
+            return;
+        }
+        fitnessClass.removeMember(member);
+        print(member.getProfile().toString() + " is removed from " + fitnessClass.toString());
+    }
+
+    @FXML
+    private void onAddGuestButtonClick() {
+        FitnessClass fitnessClass = checkClassValidity();
+        if (fitnessClass == null) return;
+        Member member = checkMemberValdity();
+        if (member == null) return;
+        if (getGuestPass(member) <= 0) {
+            print("guest pass not available.");
+            return;
+        }
+        if (member.getHomeStudio() != fitnessClass.getStudio()) {
+            print(member.getProfile().toString() + " (guest) is attending a class at " + fitnessClass.getStudio().getCity() + ". - home studio at " + member.getHomeStudio().getCity());
+            return;
+        }
+        fitnessClass.addGuest(member);
+        if (member instanceof Family) {
+            ((Family) member).setGuest(false);
+        } else if (member instanceof Premium) {
+            ((Premium) member).setGuestPass(getGuestPass(member) - 1);
+        }
+        print(member.getProfile().toString() + " (guest) attendance recorded at " + fitnessClass.toString());
+    }
+
+    @FXML
+    private void onRemoveGuestButtonClick() {
+        FitnessClass fitnessClass = checkClassValidity();
+        if (fitnessClass == null) return;
+        Member member = checkMemberValdity();
+        if (member == null) return;
+
+        if (!fitnessClass.getGuests().contains(member)) {
+            print(member.getProfile().toString() + " (guest) is not in " + fitnessClass.toString());
+            return;
+        }
+        fitnessClass.removeGuest(member);
+        if (member instanceof Family) {
+            ((Family) member).setGuest(true);
+        } else if (member instanceof Premium) {
+            ((Premium) member).setGuestPass(getGuestPass(member) + 1);
+        }
+        print(member.getProfile().toString() + " (guest) is removed from " + fitnessClass.toString());
+    }
+
+    private FitnessClass checkClassValidity() {
+        Offer offer = stringToOffer(classTypeStr);
+        Instructor instructor = stringToInstructor(instructorStr);
+        Location studio = stringToLocation(homeStudioStr2);
+        FitnessClass fitnessClass = schedule.find(offer, instructor, studio);
+        if (fitnessClass == null) {
+            print("no class found");
+            return null;
+        }
+        return fitnessClass;
+    }
+
+    private Member checkMemberValdity() {
+        String fname = firstNameTextField2.getText();
+        String lname = lastNameTextField2.getText();
+        if (fname == null || lname == null || dobDatePicker2.getValue() == null)
+        {
+            print("invalid input");
+            return null;
+        }
+        Date date = stringToDate(dobDatePicker2.getValue().toString());
+        Profile profile = new Profile(fname, lname, date);
+        Member member = new Member(profile, null, null);
+        if (!memberlist.contains(member)) {
+            print(member.getProfile().toString() + " is not in the member database.");
+            return null;
+        }
+        member = memberlist.getMember(memberlist.find(member));
+        if (member.getExpire().isExpired()) {
+            print(member.getProfile().toString() + " membership expired.");
+            return null;
+        }
+        guestPassTextField2.setText(Integer.toString(getGuestPass(member)));
+        return member;
+    }
+
+    private int getGuestPass(Member member) {
+        int guestpass = 0;
+        switch (member) {
+            case Family f -> {
+                guestpass = f.getGuest() ? 1 : 0;
+            }
+            case Premium p -> {
+                guestpass = p.getGuestPass();
+            }
+            default ->  {
+            }
+        }
+        return guestpass;
     }
 
     @FXML
