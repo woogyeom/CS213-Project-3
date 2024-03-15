@@ -110,7 +110,16 @@
             </Tab>
             <Tab text="Studio Location">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="locationTable" layoutX="52.0" layoutY="21.0" prefHeight="200.0" prefWidth="389.0">
+                          <columns>
+                            <TableColumn fx:id="cityColumn" prefWidth="130.66669845581055" text="City" />
+                              <TableColumn fx:id="countyColumn" prefWidth="148.66664123535156" text="County" />
+                            <TableColumn fx:id="zipcodeColumn" minWidth="8.0" prefWidth="109.3333740234375" text="Zipcode" />
+                          </columns>
+                        </TableView>
+                     </children></AnchorPane>
               </content>
             </Tab>
           <Tab text="Demo Only">

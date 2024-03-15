@@ -110,7 +110,29 @@ public class StudioManagerController {
     @FXML
     private Button loadScheduleButton;
 
+    @FXML
+    private TableView<Location> locationTable;
+
+    @FXML
+    private TableColumn<Location, String> cityColumn;
+
+    @FXML
+    private TableColumn<Location, String> countyColumn;
+
+    @FXML
+    private TableColumn<Location, String> zipcodeColumn;
+
     //
+
+    @FXML
+    public void initialize() {
+        cityColumn.setCellValueFactory(new PropertyValueFactory<Location, String>("city"));
+        countyColumn.setCellValueFactory(new PropertyValueFactory<Location, String>("county"));
+        zipcodeColumn.setCellValueFactory(new PropertyValueFactory<Location, String>("zipcode"));
+
+        ObservableList<Location> locations = FXCollections.observableArrayList(Location.values());
+        locationTable.setItems(locations);
+    }
 
     @FXML
     private void handleLoadSchedule(ActionEvent event) {
