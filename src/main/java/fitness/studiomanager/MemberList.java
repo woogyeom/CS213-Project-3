@@ -109,7 +109,6 @@ public class MemberList {
      * @throws IOException If an I/O error occurs.
      */
     public void load(File file) throws IOException {
-        System.out.println("-list of members loaded-");
 
         Scanner scanner = new Scanner(file);
         while (scanner.hasNextLine()) {
@@ -164,11 +163,7 @@ public class MemberList {
                 add(newMember);
             }
 
-            System.out.println(newMember.toString());
-
         }
-
-        System.out.println("-end of list-");
     }
 
     /**

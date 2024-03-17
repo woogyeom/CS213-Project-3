@@ -143,7 +143,6 @@ public class StudioManagerController {
         File file = filechooser.showOpenDialog(null);
 
         if (file != null) {
-            Schedule schedule = new Schedule();
             try {
                 schedule.load(file);
                 displayScheduleInfo(schedule);
@@ -276,7 +275,7 @@ public class StudioManagerController {
     private void onAddMemberButtonClick() {
         FitnessClass fitnessClass = checkClassValidity();
         if (fitnessClass == null) return;
-        Member member = checkMemberValdity();
+        Member member = checkMemberValidity();
         if (member == null) return;
 
         if (member instanceof Basic && member.getHomeStudio() != fitnessClass.getStudio()) {
@@ -306,14 +305,14 @@ public class StudioManagerController {
         if (member instanceof  Basic) {
             ((Basic) member).setNumClasses(((Basic) member).getNumClasses() + 1);
         }
-        System.out.println(member.getProfile().toString() + " attendance recorded " + fitnessClass.getClassInfo() + " at " + fitnessClass.getStudio());
+        print(member.getProfile().toString() + " attendance recorded " + fitnessClass.getClassInfo() + " at " + fitnessClass.getStudio());
     }
 
     @FXML
     private void onRemoveMemberButtonClick() {
         FitnessClass fitnessClass = checkClassValidity();
         if (fitnessClass == null) return;
-        Member member = checkMemberValdity();
+        Member member = checkMemberValidity();
         if (member == null) return;
 
         if (!fitnessClass.getMembers().contains(member)) {
@@ -328,7 +327,7 @@ public class StudioManagerController {
     private void onAddGuestButtonClick() {
         FitnessClass fitnessClass = checkClassValidity();
         if (fitnessClass == null) return;
-        Member member = checkMemberValdity();
+        Member member = checkMemberValidity();
         if (member == null) return;
         if (getGuestPass(member) <= 0) {
             print("guest pass not available.");
@@ -338,11 +337,17 @@ public class StudioManagerController {
             print(member.getProfile().toString() + " (guest) is attending a class at " + fitnessClass.getStudio().getCity() + ". - home studio at " + member.getHomeStudio().getCity());
             return;
         }
+        if (fitnessClass.getGuests().contains(member)) {
+            print(member.getProfile().toString() + " (guest) is already in the class.");
+            return;
+        }
         fitnessClass.addGuest(member);
         if (member instanceof Family) {
             ((Family) member).setGuest(false);
+            guestPassTextField2.setText(Integer.toString(getGuestPass(member)));
         } else if (member instanceof Premium) {
             ((Premium) member).setGuestPass(getGuestPass(member) - 1);
+            guestPassTextField2.setText(Integer.toString(getGuestPass(member)));
         }
         print(member.getProfile().toString() + " (guest) attendance recorded at " + fitnessClass.toString());
     }
@@ -351,7 +356,7 @@ public class StudioManagerController {
     private void onRemoveGuestButtonClick() {
         FitnessClass fitnessClass = checkClassValidity();
         if (fitnessClass == null) return;
-        Member member = checkMemberValdity();
+        Member member = checkMemberValidity();
         if (member == null) return;
 
         if (!fitnessClass.getGuests().contains(member)) {
@@ -361,8 +366,10 @@ public class StudioManagerController {
         fitnessClass.removeGuest(member);
         if (member instanceof Family) {
             ((Family) member).setGuest(true);
+            guestPassTextField2.setText(Integer.toString(getGuestPass(member)));
         } else if (member instanceof Premium) {
             ((Premium) member).setGuestPass(getGuestPass(member) + 1);
+            guestPassTextField2.setText(Integer.toString(getGuestPass(member)));
         }
         print(member.getProfile().toString() + " (guest) is removed from " + fitnessClass.toString());
     }
@@ -379,7 +386,7 @@ public class StudioManagerController {
         return fitnessClass;
     }
 
-    private Member checkMemberValdity() {
+    private Member checkMemberValidity() {
         String fname = firstNameTextField2.getText();
         String lname = lastNameTextField2.getText();
         if (fname == null || lname == null || dobDatePicker2.getValue() == null)
