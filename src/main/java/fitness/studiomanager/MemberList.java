@@ -119,10 +119,10 @@ public class MemberList {
             String[] tokens = data.split(" +");
 
             if (tokens.length != 6) {
-                throw new IllegalArgumentException("Expected 6 tokens, but found " + tokens.length);
+                throw new IOException("Expected 6 tokens, but found " + tokens.length);
             }
             if (!(tokens[0].equalsIgnoreCase("B")) && !(tokens[0].equalsIgnoreCase("F")) && !(tokens[0].equalsIgnoreCase("P"))) {
-                throw new IllegalArgumentException("Invalid membership type. Expected B, F or P but got: "+ tokens[0]);
+                throw new IOException("Invalid membership type. Expected B, F or P but got: "+ tokens[0]);
             }
 
             Date birthDate = stringToDate(tokens[3]);
@@ -186,7 +186,7 @@ public class MemberList {
     /**
      * Prints members sorted by county.
      */
-    public void printByCounty() {
+    public String printByCounty() {
         for (int i = 0; i < size - 1; i++) {
             int minIndex = i;
             for (int j = i + 1; j < size; j++) {
@@ -205,23 +205,23 @@ public class MemberList {
         }
 
         if (size == 0) {
-            System.out.println("Members List is empty!");
+            return "Members List is empty!";
         } else {
+            String result = "";
             for (Member member : members) {
                 if (member != null) {
-                    System.out.println(member);
+                    result = result.concat(member.toString() + "\n");
                 }
             }
+            result = result.substring(0, result.length() - 1);
+            return result;
         }
-
     }
 
     /**
      * Prints members sorted by member profile.
-     *
-     * @param sCommand Indicates if the "S" command is used for indentation.
      */
-    public void printByMember(boolean sCommand) { // We need this sCommand boolean otherwise we need one more method
+    public String printByMember() { // We need this sCommand boolean otherwise we need one more method
         for (int i = 0; i < size - 1; i++) {
             int minIndex = i;
             for (int j = i + 1; j < size; j++) {
@@ -236,51 +236,34 @@ public class MemberList {
         }
 
         if (size == 0) {
-            System.out.println("Members List is empty!");
+            return "Members List is empty!";
         } else {
+            String result = "";
             for (Member member : members) {
                 if (member != null) {
-                    if (sCommand) { // Please keep this line as we need to indent each line in the result for "S" command.
-                        System.out.print("   ");
-                    }
-                    System.out.println(member);
+                    result = result.concat(member.toString() + "\n");
                 }
             }
+            result = result.substring(0, result.length() - 1);
+            return result;
         }
     }
 
     /**
      * Prints member fees.
      */
-    public void printFees() {
+    public String printFees() {
+        if (size == 0) {
+            return "Members List is empty!";
+        }
+        String result = "";
         for (Member member : members) {
-
             if (member != null) {
-                boolean isExpired = expired(member);
-
-                if (member instanceof Basic) {
-                    System.out.println(member + " [next due: $" + member.bill() + "]");
-                }
-                if (member instanceof Family) {
-                    if (isExpired) {
-                        System.out.println(member + " [next due: $" + member.bill() + "]");
-                    } else {
-                        if (((Family) member).getGuest()) {
-                            System.out.println(member + " [next due: $" + member.bill() + "]");
-                        } else {
-                            System.out.println(member + " [next due: $" + member.bill() + "]");
-                        }
-                    }
-                }
-                if (member instanceof Premium) {
-                    if (isExpired) {
-                        System.out.println(member + " [next due: $" + member.bill() + "]");
-                    } else {
-                        System.out.println(member + " [next due: $" + member.bill() + "]");
-                    }
-                }
+                result = result.concat(member + " [next due: $" + member.bill() + "]\n");
             }
         }
+        result = result.substring(0, result.length() - 1);
+        return result;
     }
 
     /**

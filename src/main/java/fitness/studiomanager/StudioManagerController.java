@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * Controller class for the Studio Manager application.
+ */
 public class StudioManagerController {
 
     private MemberList memberlist;
@@ -122,8 +125,9 @@ public class StudioManagerController {
     @FXML
     private TableColumn<Location, String> zipcodeColumn;
 
-    //
-
+    /**
+     * Initializes the TableView for displaying studio locations.
+     */
     @FXML
     public void initialize() {
         cityColumn.setCellValueFactory(new PropertyValueFactory<Location, String>("city"));
@@ -134,6 +138,11 @@ public class StudioManagerController {
         locationTable.setItems(locations);
     }
 
+    /**
+     * Handles the action event when the "Load Schedule" button is clicked.
+     *
+     * @param event The action event.
+     */
     @FXML
     private void handleLoadSchedule(ActionEvent event) {
         FileChooser filechooser = new FileChooser();
@@ -145,8 +154,9 @@ public class StudioManagerController {
         if (file != null) {
             try {
                 schedule.load(file);
+                print("Class Schedule loaded");
                 displayScheduleInfo(schedule);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error Loading Schedule");
                 alert.setHeaderText(null);
@@ -156,6 +166,11 @@ public class StudioManagerController {
         }
     }
 
+    /**
+     * Displays the schedule information in the schedule table.
+     *
+     * @param schedule The schedule to be displayed.
+     */
     private void displayScheduleInfo(Schedule schedule) {
         classColumn.setCellValueFactory(new PropertyValueFactory<FitnessClass, Offer>("classInfo"));
         instructorColumn.setCellValueFactory(new PropertyValueFactory<FitnessClass, Instructor>("instructor"));
@@ -170,6 +185,10 @@ public class StudioManagerController {
 
 
     private String memberTypeStr = "Basic";
+    /**
+     * Handles the action event when the member type radio buttons are selected.
+     * Updates the member type string and sets the guest pass text field accordingly.
+     */
     @FXML
     private void handleMemberType() {
         RadioButton selectedRadioButton = (RadioButton) memberTypeRadio.getSelectedToggle();
@@ -188,7 +207,12 @@ public class StudioManagerController {
             }
         }
     }
+
     private String homeStudioStr1 = "Bridgewater";
+    /**
+     * Handles the action event when the home studio radio buttons are selected.
+     * Updates the home studio string.
+     */
     @FXML
     private void handleHomeStudio1() {
         RadioButton selectedRadioButton = (RadioButton) homeStudioRadio1.getSelectedToggle();
@@ -197,6 +221,10 @@ public class StudioManagerController {
         }
     }
 
+    /**
+     * Handles the action event when the class type radio buttons are selected.
+     * Updates the class type string.
+     */
     private String classTypeStr = "Pilates";
     @FXML
     private void handelClassType() {
@@ -206,6 +234,10 @@ public class StudioManagerController {
         }
     }
 
+    /**
+     * Handles the action event when the instructor radio buttons are selected.
+     * Updates the instructor string.
+     */
     private String instructorStr = "Jennifer";
     @FXML
     private void handleInstructor() {
@@ -215,6 +247,10 @@ public class StudioManagerController {
         }
     }
 
+    /**
+     * Handles the action event when the home studio radio buttons are selected.
+     * Updates the home studio string.
+     */
     private String homeStudioStr2 = "Bridgewater";
     @FXML
     private void handleHomeStudio2() {
@@ -224,9 +260,14 @@ public class StudioManagerController {
         }
     }
 
+    /**
+     * Handles the action event when the "Add New" button is clicked.
+     * Retrieves input data, creates a new member object based on the selected member type,
+     * and adds it to the member list.
+     * Displays appropriate messages for invalid input or existing members.
+     */
     @FXML
     private void onAddNewButtonClick() {
-
         String fname = firstNameTextField1.getText();
         String lname = lastNameTextField1.getText();
         if (fname == null || lname == null || dobDatePicker1.getValue() == null)
@@ -256,6 +297,13 @@ public class StudioManagerController {
         print(fname + " " + lname + " added");
     }
 
+    /**
+     * Handles the action event when the "Load Members" button is clicked.
+     * Opens a file chooser dialog to load member data from a text file.
+     * Displays appropriate messages for successful or failed loading.
+     *
+     * @throws IOException If an I/O error occurs.
+     */
     @FXML
     private void onLoadMembersButtonClick() throws IOException {
         FileChooser fileChooser = new FileChooser();
@@ -266,11 +314,20 @@ public class StudioManagerController {
         File file = fileChooser.showOpenDialog(stage);
 
         if (file != null) {
-            memberlist.load(file);
-            print("Members loaded.");
+            try {
+                memberlist.load(file);
+                print("Members loaded.");
+            } catch (IOException e) {
+                print("Error loading members");
+            }
         }
     }
 
+    /**
+     * Handles the action event when the "Add Member" button is clicked.
+     * Validates the selected fitness class and member, and adds the member to the class.
+     * Displays appropriate messages for invalid input, existing members, or class conflicts.
+     */
     @FXML
     private void onAddMemberButtonClick() {
         FitnessClass fitnessClass = checkClassValidity();
@@ -308,6 +365,11 @@ public class StudioManagerController {
         print(member.getProfile().toString() + " attendance recorded " + fitnessClass.getClassInfo() + " at " + fitnessClass.getStudio());
     }
 
+    /**
+     * Handles the action event when the "Remove Member" button is clicked.
+     * Validates the selected fitness class and member, and removes the member from the class.
+     * Displays appropriate messages for invalid input or non-existing members.
+     */
     @FXML
     private void onRemoveMemberButtonClick() {
         FitnessClass fitnessClass = checkClassValidity();
@@ -323,6 +385,11 @@ public class StudioManagerController {
         print(member.getProfile().toString() + " is removed from " + fitnessClass.toString());
     }
 
+    /**
+     * Handles the action event when the "Add Guest" button is clicked.
+     * Validates the selected fitness class and member, and adds the member as a guest to the class.
+     * Updates guest pass information and displays appropriate messages.
+     */
     @FXML
     private void onAddGuestButtonClick() {
         FitnessClass fitnessClass = checkClassValidity();
@@ -352,6 +419,11 @@ public class StudioManagerController {
         print(member.getProfile().toString() + " (guest) attendance recorded at " + fitnessClass.toString());
     }
 
+    /**
+     * Handles the action event when the "Remove Guest" button is clicked.
+     * Validates the selected fitness class and guest member, and removes the guest from the class.
+     * Updates guest pass information and displays appropriate messages.
+     */
     @FXML
     private void onRemoveGuestButtonClick() {
         FitnessClass fitnessClass = checkClassValidity();
@@ -374,6 +446,89 @@ public class StudioManagerController {
         print(member.getProfile().toString() + " (guest) is removed from " + fitnessClass.toString());
     }
 
+    /**
+     * Handles the action event when the "Print By Profile" button is clicked.
+     * Prints the member list sorted by profile information.
+     */
+    @FXML
+    private void onPrintByProfileButtonClicked() {
+        print(memberlist.printByMember());
+    }
+
+    /**
+     * Handles the action event when the "Print By County" button is clicked.
+     * Prints the member list sorted by county information.
+     */
+    @FXML
+    private void onPrintByCountyButtonClicked() {
+        print(memberlist.printByCounty());
+    }
+
+    /**
+     * Handles the action event when the "Print With Next Due" button is clicked.
+     * Prints the member list with information about the next due fees.
+     */
+    @FXML
+    private void onPrintWithNextDueButtonClicked() {
+        print(memberlist.printFees());
+    }
+
+    /**
+     * Handles the action event when the "Schedule" button is clicked.
+     * Prints the schedule of fitness classes.
+     */
+    @FXML
+    private void onShowScheduleButtonClicked() {
+        for (int i = 0; i < schedule.getNumClasses(); i++) {
+            print(schedule.getClasses()[i].toString());
+        }
+    }
+
+    /**
+     * Handles the action event when the "Attendees" button is clicked.
+     * Prints the attendees for each fitness class in the schedule.
+     */
+    @FXML
+    private void onShowAttendeesButtonClicked() {
+        for (int i = 0; i < schedule.getNumClasses(); i++) {
+            FitnessClass fitnessClass = schedule.getClasses()[i];
+            print(fitnessClass.toString());
+            if (!fitnessClass.getMembers().isEmpty()) {
+                print("[Attendees]");
+                print(fitnessClass.getMembers().printByMember());
+            }
+            if (!fitnessClass.getGuests().isEmpty()) {
+                print("[Guests]");
+                print(fitnessClass.getMembers().printByMember());
+            }
+        }
+    }
+
+    /**
+     * Handles the action event when the "Studio Locations" button is clicked.
+     * Prints the available studio locations.
+     */
+    @FXML
+    private void onShowStudioLocationsButtonClicked() {
+        for (Location location : Location.values()) {
+            print(location.toString());
+        }
+    }
+
+    /**
+     * Clears the text area.
+     */
+    @FXML
+    private void clearTextArea() {
+        textArea.clear();
+    }
+
+    /**
+     * Checks the validity of the selected fitness class based on the provided class type,
+     * instructor, and studio location.
+     *
+     * @return A FitnessClass object representing the valid fitness class, or null if not found.
+     */
     private FitnessClass checkClassValidity() {
         Offer offer = stringToOffer(classTypeStr);
         Instructor instructor = stringToInstructor(instructorStr);
@@ -386,6 +541,12 @@ public class StudioManagerController {
         return fitnessClass;
     }
 
+    /**
+     * Checks the validity of the member based on the provided first name, last name, and date of birth.
+     * Validates input data and ensures that the member exists in the member database and has not expired.
+     *
+     * @return A Member object representing the valid member, or null if not found or invalid.
+     */
     private Member checkMemberValidity() {
         String fname = firstNameTextField2.getText();
         String lname = lastNameTextField2.getText();
@@ -410,6 +571,12 @@ public class StudioManagerController {
         return member;
     }
 
+    /**
+     * Retrieves the number of guest passes available for the given member.
+     *
+     * @param member The member for which to retrieve the guest passes.
+     * @return The number of guest passes available for the member.
+     */
     private int getGuestPass(Member member) {
         int guestpass = 0;
         switch (member) {
@@ -425,6 +592,11 @@ public class StudioManagerController {
         return guestpass;
     }
 
+    /**
+     * Appends the specified string to the text area for display.
+     *
+     * @param str The string to be appended to the text area.
+     */
     @FXML
     private void print(String str) {
         textArea.appendText(str + '\n');

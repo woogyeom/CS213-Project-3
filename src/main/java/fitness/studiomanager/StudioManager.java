@@ -68,7 +68,7 @@ public class StudioManager {
                 case "PM": // display the members sorted by member profiles
                     System.out.println();
                     System.out.println("-list of members sorted by member profiles-");
-                    memberlist.printByMember(false);
+                    memberlist.printByMember();
                     System.out.println("-end of list-");
                     System.out.println();
                     break;
@@ -378,11 +378,11 @@ public class StudioManager {
             System.out.println(fitnessClass);
             if (!fitnessClass.getMembers().isEmpty()) {
                 System.out.println("[Attendees]");
-                fitnessClass.getMembers().printByMember(true);
+                fitnessClass.getMembers().printByMember();
             }
             if (!fitnessClass.getGuests().isEmpty()) {
                 System.out.println("[Guests]");
-                fitnessClass.getGuests().printByMember(true);
+                fitnessClass.getGuests().printByMember();
             }
         }
         System.out.println("-end of class list.");
