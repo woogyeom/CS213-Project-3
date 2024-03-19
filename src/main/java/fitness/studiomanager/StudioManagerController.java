@@ -354,7 +354,7 @@ public class StudioManagerController {
         }
         for (int i = 0; i < count; i++) {
             if (classes[i].getMembers().contains(member)) {
-                System.out.println("Time conflict - " + member.getProfile().toString() + " is in another class held at " + time.toString() + " - " + fitnessClass.toString());
+                print("Time conflict - " + member.getProfile().toString() + " is in another class held at " + time.toString() + " - " + fitnessClass.toString());
                 return;
             }
         }
@@ -613,7 +613,7 @@ public class StudioManagerController {
 
         for (String token : tokens) {
             if (token.matches("[a-zA-Z]+")) {
-                System.out.println("The date contains characters.");
+                print("The date contains characters.");
                 return null;
             }
         }
@@ -640,7 +640,7 @@ public class StudioManagerController {
         } else if (string.equalsIgnoreCase("Cardio")) {
             offer = Offer.CARDIO;
         } else {
-            System.out.println(string + " - class name does not exist.");
+            print(string + " - class name does not exist.");
         }
         return offer;
     }
@@ -664,7 +664,7 @@ public class StudioManagerController {
         } else if (string.equalsIgnoreCase("Denise")) {
             instructor = Instructor.DENISE;
         } else {
-            System.out.println(string + " - instructor does not exist.");
+            print(string + " - instructor does not exist.");
         }
         return instructor;
     }
@@ -688,7 +688,7 @@ public class StudioManagerController {
         } else if (string.equalsIgnoreCase("Somerville")) {
             location = Location.SOMERVILLE;
         } else {
-            System.out.println(string + " - invalid studio location.");
+            print(string + " - invalid studio location.");
         }
         return location;
     }
