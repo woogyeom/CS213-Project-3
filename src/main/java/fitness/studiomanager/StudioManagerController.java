@@ -16,6 +16,8 @@ import java.util.Objects;
 
 /**
  * Controller class for the Studio Manager application.
+ *
+ * @author Woogyeom Sim, Aravind Chendu
  */
 public class StudioManagerController {
 
@@ -276,7 +278,7 @@ public class StudioManagerController {
             return;
         }
         Date date = stringToDate(dobDatePicker1.getValue().toString());
-        if (!dateCheck(date)) {
+        if (date != null && !dateCheck(date)) {
             return;
         }
         Profile profile = new Profile(fname, lname, date);
