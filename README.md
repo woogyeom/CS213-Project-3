@@ -1,4 +1,4 @@
-# CS 213 Spring 2024 - Project #2
+# CS 213 Spring 2024 - Project #3
 Studio Manager: Fitness Club Management System
 This program provides a command-line system to manage memberships, fitness classes, and attendance at a fitness club.
 
